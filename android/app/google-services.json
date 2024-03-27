@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "732239600309",
+    "project_id": "fb-practise-a21f2",
+    "storage_bucket": "fb-practise-a21f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732239600309:android:72322254486c2d28e6bcfc",
+        "android_client_info": {
+          "package_name": "com.example.new_project_practise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN6sESyYpw5xxNU7GRQ3iFF1QyMr0HXl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
