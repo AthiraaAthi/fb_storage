@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ImagePickerScreen extends StatelessWidget {
   const ImagePickerScreen({super.key});
@@ -32,6 +33,7 @@ class ImagePickerScreen extends StatelessWidget {
               height: 280,
               width: 300,
               decoration: BoxDecoration(
+                  //image: DecorationImage(image: FileImage()),
                   color: Colors.greenAccent,
                   borderRadius: BorderRadius.circular(20)),
             ),
@@ -39,14 +41,57 @@ class ImagePickerScreen extends StatelessWidget {
               height: 30,
             ),
             Center(
-              child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.upload,
-                    size: 30,
-                  )),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      IconButton(
+                          onPressed: () async {
+                            final ImagePicker picker = ImagePicker();
+// Pick an image.
+                            final XFile? image = await picker.pickImage(
+                                source: ImageSource.gallery);
+                            // Pick singe image or video.
+                            final XFile? media = await picker.pickMedia();
+// Pick multiple images and videos.
+                            final List<XFile> medias =
+                                await picker.pickMultipleMedia();
+                          },
+                          icon: Icon(
+                            Icons.upload,
+                            size: 30,
+                          )),
+                      Text("Upload")
+                    ],
+                  ),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Column(
+                    children: [
+                      IconButton(
+                          onPressed: () async {
+                            final ImagePicker picker = ImagePicker();
+                            // Capture a photo.
+                            final XFile? photo = await picker.pickImage(
+                                source: ImageSource.camera);
+                            // Pick singe image or video.
+                            final XFile? media = await picker.pickMedia();
+// Pick multiple images and videos.
+                            final List<XFile> medias =
+                                await picker.pickMultipleMedia();
+                          },
+                          icon: Icon(
+                            Icons.camera_alt,
+                            size: 30,
+                          )),
+                      Text("Camera")
+                    ],
+                  ),
+                ],
+              ),
             ),
-            Text("Upload Here..")
           ],
         ),
       ),
