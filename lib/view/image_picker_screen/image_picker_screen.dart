@@ -1,8 +1,19 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImagePickerScreen extends StatelessWidget {
+class ImagePickerScreen extends StatefulWidget {
   const ImagePickerScreen({super.key});
+
+  @override
+  State<ImagePickerScreen> createState() => _ImagePickerScreenState();
+}
+
+class _ImagePickerScreenState extends State<ImagePickerScreen> {
+  String url =
+      "https://firebasestorage.googleapis.com/v0/b/fb-practise-a21f2.appspot.com/o/images%2FPanda%E2%99%A1.jpeg?alt=media&token=a40c8419-614f-4607-9a5d-178a47fb3328";
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +44,12 @@ class ImagePickerScreen extends StatelessWidget {
               height: 280,
               width: 300,
               decoration: BoxDecoration(
-                  //image: DecorationImage(image: FileImage()),
                   color: Colors.greenAccent,
                   borderRadius: BorderRadius.circular(20)),
+              child: Image.network(
+                url,
+                fit: BoxFit.cover,
+              ),
             ),
             SizedBox(
               height: 30,
@@ -48,15 +62,30 @@ class ImagePickerScreen extends StatelessWidget {
                     children: [
                       IconButton(
                           onPressed: () async {
+                            final uniqueNameStamp =
+                                DateTime.now().microsecondsSinceEpoch;
                             final ImagePicker picker = ImagePicker();
 // Pick an image.
-                            final XFile? image = await picker.pickImage(
+                            final XFile? pickedImage = await picker.pickImage(
                                 source: ImageSource.gallery);
-                            // Pick singe image or video.
-                            final XFile? media = await picker.pickMedia();
-// Pick multiple images and videos.
-                            final List<XFile> medias =
-                                await picker.pickMultipleMedia();
+                            if (pickedImage != null) {
+                              final storageRef = FirebaseStorage.instance.ref();
+                              Reference? imagesRef = storageRef.child("images");
+                              final uploadref =
+                                  imagesRef.child(uniqueNameStamp.toString());
+                              await uploadref.putFile(File(pickedImage.path));
+                              final downloadUrl =
+                                  await uploadref.getDownloadURL();
+                              url = downloadUrl;
+
+                              setState(() {});
+                            }
+//
+//                             // Pick singe image or video.
+//                             final XFile? media = await picker.pickMedia();
+// // Pick multiple images and videos.
+//                             final List<XFile> medias =
+//                                 await picker.pickMultipleMedia();
                           },
                           icon: Icon(
                             Icons.upload,
@@ -72,15 +101,27 @@ class ImagePickerScreen extends StatelessWidget {
                     children: [
                       IconButton(
                           onPressed: () async {
-                            final ImagePicker picker = ImagePicker();
-                            // Capture a photo.
-                            final XFile? photo = await picker.pickImage(
-                                source: ImageSource.camera);
-                            // Pick singe image or video.
-                            final XFile? media = await picker.pickMedia();
-// Pick multiple images and videos.
-                            final List<XFile> medias =
-                                await picker.pickMultipleMedia();
+                            final uniqueNameStamp =
+                                DateTime.now().microsecondsSinceEpoch;
+                            XFile? pickedImage = await ImagePicker()
+                                .pickImage(source: ImageSource.camera);
+                            if (pickedImage != null) {
+                              final storageRef = FirebaseStorage.instance.ref();
+                              Reference? imagesRef = storageRef.child("images");
+                              final uploadref =
+                                  imagesRef.child(uniqueNameStamp.toString());
+                              await uploadref.putFile(File(pickedImage.path));
+                              final downloadUrl =
+                                  await uploadref.getDownloadURL();
+                              url = downloadUrl;
+
+                              setState(() {});
+                            }
+//                             // Pick singe image or video.
+//                             final XFile? media = await picker.pickMedia();
+// // Pick multiple images and videos.
+//                             final List<XFile> medias =
+//                                 await picker.pickMultipleMedia();
                           },
                           icon: Icon(
                             Icons.camera_alt,

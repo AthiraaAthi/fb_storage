@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               //document snapshot
               DocumentSnapshot users = snapshot.data!.docs[index];
+
               return HomeScreenWidget(
                 title: users["name"],
                 onDeletePressed: () {
